@@ -21,7 +21,7 @@ void get_st_mode(unsigned num,int *ans);//判断文件权限
 int main(int argc,char **argv)
 {
  int num;
- pus(argv[0]);
+ puts(argv[0]);
  num=get_num;
  printf("%d\n",num);
  show_file(argv[0]);
@@ -31,8 +31,7 @@ int main(int argc,char **argv)
 void get_st_mode(unsigned num,int *ans)
 {
     //r==2,w==3,x==5//
-    ans[1]=ans[2]=ans[0]=1;//初始化,后判断
-    //判断文件权限//
+    ans[1]=ans[2]=ans[0]=1;
     if(num&S_IRUSR==S_IRUSR)
     ans[0]*=2；
     if(num&S_IWUSR==S_IWUSR)
