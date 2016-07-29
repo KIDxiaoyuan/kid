@@ -20,17 +20,8 @@
 #define R 01000
 #define U 00100
 #define L 00010
-#define T 00001
 #define true 0
 #define false 1
-
-typedef struct node
-{
-    char fullname[255];
-    char filename[255];
-    time_t st_time;
-    struct node *next;
-}Node;
 
 void get_st_mode(unsigned num,int *ans);
 void drive(char *dirname,int flag);
@@ -40,17 +31,14 @@ int display(const char *dirname);
 void strcopy(char*str,char*str1, char*str2);
 void f_catalog(DIR*dir_ptr,char*dirname,int flag);
 void show_dispose(DIR*dir_ptr,char*dirname,int flag);
-void show_sort(Node*head,int flag);
-void sort_dir(Node *head);
 void show (DIR* dir_ptr,char *dirname,int flag);
-Node *creat(DIR *dir_ptr,char *dirname,int flag);
 
 int main(int argc,char *argv[])
 {
     char dir_now[4096];
     getcwd(dir_now,sizeof(dir_now));
     int flag=00000,oc;
-    while((oc=getopt(argc,argv,"aultR"))!=-1)
+    while((oc=getopt(argc,argv,"aulR"))!=-1)
     {
         switch(oc)
         {
@@ -69,11 +57,7 @@ int main(int argc,char *argv[])
                 flag=flag|L;
                 break;
             }
-            case 't':
-            {
-                flag=flag|T;
-                break;
-            }
+
             case 'R':
             {
                 flag=flag|R;
@@ -82,7 +66,7 @@ int main(int argc,char *argv[])
             default: break;
         }
     }
-    if(argc==1||(argc==2&&((flag&L)||(flag&A)||(flag&R)||(flag&U)||(flag&T))))
+    if(argc==1||(argc==2&&((flag&L)||(flag&A)||(flag&R)||(flag&U))))
     {
         drive(dir_now,flag);
     }
@@ -298,14 +282,6 @@ void show_dispose(DIR*dir_ptr,char*dirname,int flag)
     u=true;
     DIR* dir_ptr2;
     dir_ptr2=opendir(dirname);
-    if(flag&T)
-    {
-        Node *head;
-        head=creat(dir_ptr2,dirname,u);
-        sort_dir(head);
-        show_sort(head,flag);
-    }
-    else
     show(dir_ptr2,dirname,flag);
     closedir(dir_ptr2);
 
@@ -340,96 +316,4 @@ void show (DIR* dir_ptr,char *dirname,int flag)
         } 
     }
 }
-void show_sort(Node*head,int flag)
-{
-    int cont=0;
-    Node*p=head->next;
-    for(p;p!=NULL;p=p->next)
-    {
-        if((flag&A)&&(p->fullname[0]=='.'))
-        continue;
-        if(flag&&L)
-        {
-        display_l(p->fullname,flag);
-        printf("\t%s\n",p->filename);
-        }
-        else
-        {
-            display(p->fullname);
-            cont++;
-            if(cont%5==0)
-            printf("\n");
-        }
-    }
-}
 
-void sort_dir(Node *head)
-{
-  Node* p3=head;
-  Node* p2,*p1,*p4,*p5;
-  p2=p3->next;
-  p5=p2;
-  p1=p2;
-  int flag=false;
-  while(p1->next!=NULL)//内存循环终止的条件
-  {
-   if(p5->st_time<p1->next->st_time)//找出原链表中剩余节点中值最小的那个节点
-   {
-    p5=p1->next;
-    p4=p1;
-    flag=true;
-   }
-   p1=p1->next;
-  }
-  if(flag)//交换两个节点的顺序，值小的节点往前调
-  {
-   if(p2==p4)//此种情况为要交换顺序的两个节点相邻
-   {
-    p2->next=p5->next;
-    p5->next=p2;
-    p3->next=p5;
-   }
-   else//这种情况为要交换的两个节点不相邻
-   {
-    Node*temp=p5->next;
-    p5->next=p2->next;
-    p3->next=p5;
-    p4->next=p2;
-    p2->next=temp;
-   }
-   
-  }
-  p3=p3->next;
- Node*temp=head;
- temp=temp->next;
-}
-
-Node *creat(DIR *dir_ptr,char *dirname,int flag)
-{
-    char fullname[4096];
-    Node *head,*p,*q;
-    struct dirent *direntp;
-    struct stat buf;
-    head =(Node*)malloc(sizeof(Node));
-    q=head->next=NULL;
-    while((direntp=readdir(dir_ptr))!=NULL)
-    {
-        p=(Node*)malloc(sizeof(Node));
-        if(p==NULL)
-        {
-            puts("malloc error");
-            exit(0);
-        }
-        strcpy(p->filename,direntp->d_name);
-        strcopy(fullname,dirname,direntp->d_name);
-        stat(fullname,&buf);
-        if(flag=true)
-        p->st_time=buf.st_atime;
-        else 
-        p->st_time=buf.st_ctime;
-        strcopy(p->fullname,dirname,direntp->d_name);
-        p->next=q;
-        q=p;
-    }
-    return head;
-}
