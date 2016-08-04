@@ -10,7 +10,6 @@
 #include <linux/limits.h>
 #include <fcntl.h>
 
-
 /*
  * shell主循环
  */
@@ -28,8 +27,7 @@ void shell_loop(void)
 		//print_command();
 		/* 执行命令 */
 		execute_command();
-	}
-	
+	}	
 	printf("\nexit\n");
 }
 
@@ -40,7 +38,8 @@ void shell_loop(void)
 int read_command(void)
 {
 	/* 按行读取命令，cmdline中包含\n字符 */
-	if (fgets(cmdline, MAXLINE, stdin) == NULL)
+	if (fgets(cmdline, MAXLINE,
+ stdin) == NULL)
 		return -1;
 	return 0;
 }

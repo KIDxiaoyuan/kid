@@ -26,8 +26,6 @@ void forkexec(int i)
                p->npid=pid;
                printf("%s",cmd[0].args[0]);
                strcpy(p->backcn,cmd[0].args[0]);
-               // printf("%s",p->backcn);
-
                NODE* tmp=head->next;
                head->next=p;
                p->next=tmp;

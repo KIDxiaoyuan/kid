@@ -20,19 +20,15 @@ typedef struct builtin_cmd
 
 void do_exit(void);
 void do_cd(void);
-void do_type(void);
 void do_about(void);
 void do_jobs(void);
-void do_kill(void);
 
 BUILTIN_CMD builtins[] = 
 {
 	{"exit", do_exit},
 	{"cd", do_cd},
-	{"type", do_type},
-    {"about",do_about},
+    {"history",do_about},
     {"jobs",do_jobs},
-    {"kill",do_kill},
 	{NULL, NULL}
 };
 
@@ -42,17 +38,6 @@ BUILTIN_CMD builtins[] =
  */
 int builtin(void)
 {
-	/*
-	if (check("exit"))
-		do_exit();
-	else if (check("cd"))
-		do_cd();
-	else
-		return 0;
-
-	return 1;
-	*/
-
 	int i = 0;
 	int found = 0;
 	while (builtins[i].name != NULL)
@@ -103,52 +88,30 @@ void do_cd(void)
 
 void do_about(void)
 {
-    //while(1)
-    printf("Welcome£¡\n");
-
-}
-
-void do_kill(void)
-{
-    /*
-    int status = -1;
-    char cmd[30] = "";
-    get_command(0);
-    int num = atoi(cmd[0].args[1]);
-    while(1)
+    char history [2001][1000];
+    int i=0;
+    FILE *fp = fopen("/home/kid/.bash_history","r");
+    if(fp == NULL)
     {
-
-     //pid = atoi(cmd[0].args[1]);
-     if(0 != pid)
-     {
-        sprintf(cmd,"kill -9 %d", pid);
-        system(cmd);
-        msleep(10);   
-     } 
-     else
+        perror("fopen ");
+        return;
+    }
+    while(fp != NULL && i<=2000)
+    {
+        fgets(history[i],256,fp);
+        
+        i++;
+    }
+    for (i--;i>0;i--)
+    {
+        printf("last %d history:%s\n",2000-i,history[i]);
+        if (getchar() =='b')
         break;
     }
-    */
-    
-    get_command(0);
-    int num=atoi(cmd[0].args[1]);
-    signal(SIGQUIT,SIG_DFL);
-    kill(num,SIGQUIT);
-    signal(SIGQUIT,SIG_IGN);
-    NODE *bng=head->next;
-    NODE *pre=head;
-    while(bng!=NULL)
-    {
-        if(bng->npid==num)
-        {
-            NODE* nxt=bng->next;
-            pre->next=nxt;
-            break;
-        }
-        pre=bng;
-        bng=bng->next;
-    }
+    fclose(fp);
+
 }
+
 void do_jobs(void)
 {
     NODE *prout=head->next;
@@ -158,8 +121,4 @@ void do_jobs(void)
         
         prout=prout->next;
     }
-}
-void do_type(void)
-{
-	printf("do_type ... \n");
 }
