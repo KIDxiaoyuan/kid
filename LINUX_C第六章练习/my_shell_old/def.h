@@ -23,11 +23,10 @@ typedef struct command
 	int outfd;
 } COMMAND;
 
-
 typedef struct node
 {
    pid_t npid;
-   char *backcn[20];
+   char backcn[20];
    struct node *next;
 }NODE;
 #endif /* _DEF_H_ */

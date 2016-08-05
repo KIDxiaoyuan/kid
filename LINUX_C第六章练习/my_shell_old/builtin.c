@@ -90,21 +90,23 @@ void do_about(void)
 {
     char history [2001][1000];
     int i=0;
-    FILE *fp = fopen("/home/kid/.bash_history","r");
+    FILE *fp = fopen("/home/kid/my_bush_history.dat","r+");
     if(fp == NULL)
     {
-        perror("fopen ");
+        puts("No history file");
         return;
     }
-    while(fp != NULL && i<=2000)
+    while(!feof(fp))
     {
         fgets(history[i],256,fp);
-        
+        //printf("11111\n"); 
         i++;
     }
-    for (i--;i>0;i--)
+    int j=i+1;
+    printf("There are %d history \nView history:(b to break)\n",i);
+    for (i;i>0;i--)
     {
-        printf("last %d history:%s\n",2000-i,history[i]);
+        printf("last %d history:%s\n",j-i,history[i]);
         if (getchar() =='b')
         break;
     }
@@ -117,7 +119,7 @@ void do_jobs(void)
     NODE *prout=head->next;
     while(prout!=NULL)
     {
-        printf("%d %s\n",prout->npid,*prout->backcn);
+        printf("%d %s\n",prout->npid,prout->backcn);
         
         prout=prout->next;
     }

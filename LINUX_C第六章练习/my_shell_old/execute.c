@@ -8,24 +8,43 @@
 #include <linux/limits.h>
 #include <fcntl.h>
 #include <string.h>
-
 void forkexec(int i)
 {
 	pid_t pid;
-	pid = fork();
-	if (pid == -1)
-		ERR_EXIT("fork");
+    /*如果是kill命令，在链表中删除后台进程*/
+         if(strcmp(cmd[i].args[0],"kill")==0)
+        {
+             NODE *bng=head->next;
+             NODE *pre=head;
+            while(bng!=NULL)
+            {
+                if(bng->npid == atoi(cmd[i].args[1]))
+                {
+                    NODE* nxt=bng->next;
+                    pre->next=nxt;
+                    free(bng);
+                    break;
+                }
+                pre=bng;
+                bng=bng->next;
+            }
+        }
+    pid = fork();
+    if (pid == -1)
+    ERR_EXIT("fork");
 
 	if (pid > 0)
 	{
 		/* 父进程 */
 		if (backgnd == 1)
         {
-           /*添加入jobs的链表*/
+            char *pointer;
+              /*添加入jobs的链表*/
                NODE *p=(NODE*)malloc(sizeof(NODE));
                p->npid=pid;
                printf("%s",cmd[0].args[0]);
-               strcpy(p->backcn,cmd[0].args[0]);
+               pointer=p->backcn;
+               strcpy(pointer,cmd[0].args[0]);
                NODE* tmp=head->next;
                head->next=p;
                p->next=tmp;
@@ -38,14 +57,12 @@ void forkexec(int i)
 	{
                  
 		/* backgnd=1时，将第一条简单命令的infd重定向至/dev/null */
-		/* 当第一条命令试图从标准输入获取数据的时候立即返回EOF */
-
     	if (cmd[i].infd == 0 && backgnd == 1)
 			cmd[i].infd = open("/dev/null", O_RDONLY);
 
-		/* 将第一个简单命令进程作为进程组组长 
-		if (i == 0)
-			setpgid(0, 0);*/
+		/* 将第一个简单命令进程作为进程组组长*/ 
+		if (i == 0 && backgnd == 1)
+			setpgid(0, 0);
 		/* 子进程 */
 		if (cmd[i].infd != 0)
 		{
@@ -63,14 +80,22 @@ void forkexec(int i)
 		for (j=3; j<OPEN_MAX; ++j)
 			close(j);
 
-		/* 前台作业能够接收SIGINT、SIGQUIT信号 */
-		/* 这两个信号要恢复为默认操作 */
+
 		if (backgnd == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 		}
-       // printf("child\n");
+        /*为ls添加颜色*/
+        if(strcmp(cmd[i].args[0],"ls") == 0)
+        {
+            int temp = 0;
+            while(cmd[i].args[temp])
+            {
+                temp ++;
+            }
+            cmd[i].args[temp] = "--color=auto";
+        }
 		execvp(cmd[i].args[0], cmd[i].args);
 		exit(EXIT_FAILURE);
 	}
@@ -89,14 +114,12 @@ int execute_disk_command(void)
 	{
 		if (append)
 			cmd[cmd_count-1].outfd = open(outfile, O_WRONLY | O_CREAT
-				| O_APPEND, 0666);
+				| O_APPEND, S_IRUSR|S_IWUSR);
 		else
 			cmd[cmd_count-1].outfd = open(outfile, O_WRONLY | O_CREAT
-				| O_TRUNC, 0666);
+				| O_TRUNC, S_IRUSR|S_IWUSR);
 	}
 
-	/* 因为后台作业不会调用wait等待子进程退出 */
-	/* 为避免僵死进程，可以忽略SIGCHLD信号 */
 	if (backgnd == 1)
 		signal(SIGCHLD, SIG_IGN);
 	else
@@ -107,10 +130,14 @@ int execute_disk_command(void)
 	int fds[2];
 	for (i=0; i<cmd_count; ++i)
 	{
-		/* 如果不是最后一条命令，则需要创建管道 */
+		/* 如果不是最后一条命令，创建管道 */
 		if (i<cmd_count-1)
 		{
-			pipe(fds);
+			if(pipe(fds) == -1)
+            {
+                perror("pipe ");
+                exit(0);
+            }
 			cmd[i].outfd = fds[1];
 			cmd[i+1].infd = fds[0];
 		}
@@ -126,9 +153,7 @@ int execute_disk_command(void)
 
 	if (backgnd == 0)
 	{
-		/* 前台作业，需要等待管道中最后一个命令退出 */
 		while (wait(NULL) != lastpid);
 	}
-
 	return 0;
 }

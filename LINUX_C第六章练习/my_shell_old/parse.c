@@ -17,6 +17,7 @@ void shell_loop(void)
 {
 	while (1)
 	{
+
 		/* 初始化环境 */
 		init();
 		/* 获取命令 */
@@ -37,10 +38,18 @@ void shell_loop(void)
  */
 int read_command(void)
 {
+    FILE *fp;
 	/* 按行读取命令，cmdline中包含\n字符 */
-	if (fgets(cmdline, MAXLINE,
- stdin) == NULL)
+	if (fgets(cmdline, MAXLINE,stdin) == NULL)
 		return -1;
+    fp=fopen("/home/kid/my_bush_history.dat","at+");
+    if(fp == NULL)
+    {
+        fp=fopen("/home/kid/my_bush_history.dat","wt");
+    }
+    fseek(fp,0,SEEK_END);
+    fputs(cmdline,fp);
+    fclose(fp);
 	return 0;
 }
 
