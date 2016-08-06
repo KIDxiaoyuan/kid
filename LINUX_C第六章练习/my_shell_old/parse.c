@@ -9,7 +9,7 @@
 #include <sys/wait.h>
 #include <linux/limits.h>
 #include <fcntl.h>
-
+#include<string.h>
 /*
  * shell主循环
  */
@@ -42,6 +42,22 @@ int read_command(void)
 	/* 按行读取命令，cmdline中包含\n字符 */
 	if (fgets(cmdline, MAXLINE,stdin) == NULL)
 		return -1;
+    if(strcmp(cmdline,"\n")==0)
+    return 0;
+    char *t;
+    int len;
+    for(t=cmdline;*t!='\0';t++)
+    {
+        char temp[256];
+        if (*t =='~')
+        {
+            strcpy(temp,t+1);
+            strcpy(t,"/home/kid");
+            len = strlen(cmdline);
+            strcpy(cmdline+len,temp);
+            
+        }
+    }
     fp=fopen("/home/kid/my_bush_history.dat","at+");
     if(fp == NULL)
     {

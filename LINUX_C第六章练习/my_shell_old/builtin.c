@@ -81,6 +81,8 @@ void do_cd(void)
 {
     get_command(0);
     int fd;
+    if (cmd[0].args[1] == NULL)
+    strcpy(cmd[0].args[0],"/home/kid");
     fd=open(*(cmd[0].args),O_RDONLY);
     fchdir(fd);
     close(fd);
@@ -102,13 +104,13 @@ void do_about(void)
         //printf("11111\n"); 
         i++;
     }
-    int j=i+1;
-    printf("There are %d history \nView history:(b to break)\n",i);
-    for (i;i>0;i--)
+    int j;
+    printf("There are %d history \nView history:(b to break)\n",i-1);
+    for (j=0;j<i;j++)
     {
-        printf("last %d history:%s\n",j-i,history[i]);
-        if (getchar() =='b')
-        break;
+        printf("%d : %s\n",j,history[j]);
+        //if (getchar() =='b')
+        //break;
     }
     fclose(fp);
 

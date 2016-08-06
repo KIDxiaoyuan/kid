@@ -1,0 +1,14 @@
+a.out
+builtin.c
+builtin.h
+def.h
+execute.c
+execute.h
+externs.h
+init.c
+init.h
+main.c
+parse.c
+parse.h
+tags
+test

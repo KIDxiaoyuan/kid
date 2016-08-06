@@ -96,7 +96,10 @@ void forkexec(int i)
             }
             cmd[i].args[temp] = "--color=auto";
         }
-		execvp(cmd[i].args[0], cmd[i].args);
+		if(execvp(cmd[i].args[0], cmd[i].args) == -1)
+        {
+            perror("execvp ");
+        }
 		exit(EXIT_FAILURE);
 	}
 }
