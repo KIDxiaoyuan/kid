@@ -1,7 +1,0 @@
-hash-pjw.o: hash-pjw.c /usr/include/stdc-predef.h ../config.h hash-pjw.h
-
-/usr/include/stdc-predef.h:
-
-../config.h:
-
-hash-pjw.h:
