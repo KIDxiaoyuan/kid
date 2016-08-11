@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file alias="ico">ooopic_1470898790.ico</file>
+    </qresource>
+</RCC>
