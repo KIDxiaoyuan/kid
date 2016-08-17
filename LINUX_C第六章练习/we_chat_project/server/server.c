@@ -27,7 +27,7 @@ void server_trans(struct message *a,clientinf *clientNode);
 void server_transf(struct message *a);
 int server_view(struct message *a, clientinf *clientNode);
 ////////////////////////////////////////////////////////////////////////////
-int main (void)
+int main (void)//主函数入口
 {
     int re;
     int fd;
@@ -160,6 +160,7 @@ int main (void)
             }
             else
             {
+                //puts(a.flag);
                 if(strcmp(a.flag,"login") == 0)//登录模式
                 {
                     //不在线
@@ -185,7 +186,7 @@ int main (void)
                     {
                         memset(str,0,strlen(str));
                         time(&timep);
-                        sprintf(str,"[%s] %s to %s : %s\n",ctime(&timep),a.name,a.flag,a.msg);
+                        sprintf(str,"%s %s to %s : %s\n",ctime(&timep),a.name,a.flag,a.msg);
                         puts(str);
                         write(fd,str,strlen(str));
                     }
@@ -298,7 +299,8 @@ int reg_check(struct message *recievemsg)
     rc = sqlite3_prepare(db,sql,strlen(sql),&stmt,&tail);
     if(rc != SQLITE_OK)
     {
-        fprintf(stderr,"SQLerror :%s",sqlite3_errmsg(db));
+        fprintf(stderr,"reg_check:SQLerror :%s\n",sqlite3_errmsg(db));
+        return 0;
     }
     //执行
     rc = sqlite3_step(stmt);
@@ -346,7 +348,7 @@ int reg_check(struct message *recievemsg)
 	const char *tail;
 	
 	/*打开数据库*/
-	rc = sqlite3_open("./src/db/chat.db",&db);     
+	rc = sqlite3_open("chat.db",&db);     
     if(rc)
     { 
          fprintf(stderr,"can't open databse:%s",sqlite3_errmsg(db));
@@ -359,7 +361,7 @@ int reg_check(struct message *recievemsg)
 	rc = sqlite3_prepare(db,sql,strlen(sql),&stmt,&tail);
 	if(rc != SQLITE_OK)
 	{
-			fprintf(stderr,"SQLerror:%s",sqlite3_errmsg(db));
+            fprintf(stderr,"364:SQLerror:%s",sqlite3_errmsg(db));
 	}
 	  /*执行*/
 	 rc = sqlite3_step(stmt);
@@ -671,7 +673,7 @@ int server_reg(struct message *a, clientinf *clientNode)
     }
     else
     {
-	    printf("%s 登录失败!\n",(*a).name);
+	    printf("%s 注册失败!\n",(*a).name);
 	    strcpy((*a).msg,"register,failure!");
 	    send((*clientNode).decr,a,sizeof(struct message),0);
     }
@@ -694,7 +696,7 @@ void server_trans(struct message *a,clientinf *clientNode)
 			break;
 		}
 		L = L->next;
-	}
+			}
 	if(L == NULL)
 	{
 		strcpy((*a).msg,"noexist");

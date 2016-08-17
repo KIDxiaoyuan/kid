@@ -1,0 +1,71 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CreatLinkList	server.c	/^ LinkList CreatLinkList(void)$/;"	f
+DisplayList	server.c	/^void DisplayList(LinkList L)$/;"	f
+Group_Node	server.h	/^typedef struct Group_Node$/;"	s
+Group_list	server.h	/^}Group_list;$/;"	t	typeref:struct:_GNode
+LNode	server.h	/^}LNode,*LinkList;$/;"	t	typeref:struct:_LNode
+LOG_ADMIN	server.h	34;"	d
+LOG_FAULT	server.h	35;"	d
+LOG_USER	server.h	33;"	d
+LinkList	server.h	/^}LNode,*LinkList;$/;"	t	typeref:struct:_LNode
+MAXLEN	server.h	27;"	d
+MAX_LEN	server.h	29;"	d
+MAX_LINE	server.h	28;"	d
+REG_FAULT	server.h	32;"	d
+REG_OK	server.h	31;"	d
+User_list	server.h	/^}User_list;$/;"	t	typeref:struct:u_node
+_GNode	server.h	/^typedef struct _GNode$/;"	s
+_LNode	server.h	/^typedef struct _LNode$/;"	s
+_SERVER_H	server.h	9;"	d
+add_in	server.h	/^    struct sockaddr_in add_in;$/;"	m	struct:struct_clientinf	typeref:struct:struct_clientinf::sockaddr_in
+addressee	server.h	/^    char addressee[MAX_LEN];$/;"	m	struct:message
+admin	server.h	/^    char admin[MAX_LEN];$/;"	m	struct:Group_Node
+clientinf	server.h	/^}clientinf;$/;"	t	typeref:struct:struct_clientinf
+clientlink	server.h	/^LinkList clientlink;$/;"	v
+data	server.h	/^    datatype data;$/;"	m	struct:_LNode
+datatype	server.h	/^typedef clientinf datatype;$/;"	t
+decr	server.h	/^    int decr;$/;"	m	struct:struct_clientinf
+deletelist	server.c	/^void deletelist(LinkList L, datatype e)$/;"	f
+findlist	server.c	/^LinkList findlist(LinkList L,datatype e)$/;"	f
+flag	server.h	/^    char flag[15];$/;"	m	struct:message
+friend_list	server.h	/^    struct User_list *friend_list;$/;"	m	struct:struct_clientinf	typeref:struct:struct_clientinf::User_list
+group	server.h	/^}group;$/;"	t	typeref:struct:Group_Node
+group_list	server.h	/^    struct Group_list *group_list;$/;"	m	struct:struct_clientinf	typeref:struct:struct_clientinf::Group_list
+head	server.h	/^    struct _LNode head;    $/;"	m	struct:Group_Node	typeref:struct:Group_Node::_LNode
+insertend	server.c	/^void insertend(LinkList L,datatype e)$/;"	f
+login_check	server.c	/^ int login_check(struct message *recievemsg)$/;"	f
+main	server.c	/^int main (void)$/;"	f
+message	server.h	/^struct message$/;"	s
+msg	server.h	/^    char msg[MAXLEN];$/;"	m	struct:message
+name	server.h	/^    char name[MAX_LEN];$/;"	m	struct:Group_Node
+name	server.h	/^    char name[MAX_LEN];$/;"	m	struct:_GNode
+name	server.h	/^    char name[MAX_LEN];$/;"	m	struct:message
+name	server.h	/^    char name[MAX_LEN];$/;"	m	struct:struct_clientinf
+name	server.h	/^    char name[MAX_LEN];$/;"	m	struct:u_node
+next	server.h	/^    struct _GNode *next;$/;"	m	struct:_GNode	typeref:struct:_GNode::_GNode
+next	server.h	/^    struct _LNode *next;$/;"	m	struct:_LNode	typeref:struct:_LNode::_LNode
+next	server.h	/^    struct u_node *next;$/;"	m	struct:u_node	typeref:struct:u_node::u_node
+overlap	server.c	/^int overlap(struct message a)$/;"	f
+passwd	server.h	/^    char passwd[MAX_LEN];$/;"	m	struct:struct_clientinf
+pid	server.h	/^    pthread_t pid;$/;"	m	struct:struct_clientinf
+portnumber	server.h	30;"	d
+reg_check	server.c	/^int reg_check(struct message *recievemsg)$/;"	f
+server_admin_kick	server.c	/^int server_admin_kick(struct message *a, clientinf *clientNode)$/;"	f
+server_admin_screen	server.c	/^int server_admin_screen(struct message *a, clientinf *clientNode)$/;"	f
+server_all	server.c	/^int server_all(struct message *a, clientinf *clientNode)$/;"	f
+server_exit	server.c	/^int server_exit(struct message *a, clientinf *clientNode)   $/;"	f
+server_login	server.c	/^int server_login(struct message *a, clientinf *clientNode)$/;"	f
+server_personal	server.c	/^int server_personal(struct message *a, clientinf *clientNode)$/;"	f
+server_reg	server.c	/^int server_reg(struct message *a, clientinf *clientNode)$/;"	f
+server_trans	server.c	/^void server_trans(struct message *a,clientinf *clientNode)$/;"	f
+server_transf	server.c	/^void server_transf(struct message *a)$/;"	f
+server_view	server.c	/^int server_view(struct message *a, clientinf *clientNode)$/;"	f
+size	server.h	/^    int size;$/;"	m	struct:message
+speak	server.h	/^    int speak;$/;"	m	struct:struct_clientinf
+struct_clientinf	server.h	/^typedef  struct struct_clientinf$/;"	s
+u_node	server.h	/^typedef struct u_node$/;"	s
