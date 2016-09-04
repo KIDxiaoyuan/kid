@@ -1,0 +1,22 @@
+Sun Sep  4 11:15:18 2016
+kid TO all: Hello~
+Sun Sep  4 11:15:26 2016
+user1 TO all: Hi~
+Sun Sep  4 11:16:13 2016
+admin TO all: glad
+Sun Sep  4 11:16:13 2016
+admin TO all: to
+Sun Sep  4 11:16:13 2016
+admin TO all: see
+Sun Sep  4 11:16:13 2016
+admin TO all: you
+Sun Sep  4 11:16:43 2016
+user1 TO all: o
+Sun Sep  4 11:16:43 2016
+user1 TO all: o
+Sun Sep  4 11:18:32 2016
+admin TO all: 大家好
+Sun Sep  4 11:27:39 2016
+user1 TO all: hi
+Sun Sep  4 11:33:14 2016
+kid TO user1: 你好

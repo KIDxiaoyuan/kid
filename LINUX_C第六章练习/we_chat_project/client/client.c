@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: client.c
-	> Author: 
-	> Mail: 
-	> Created Time: Tue 16 Aug 2016 09:30:22 GMT
+    > File Name: client.c
+    > Author: 
+    > Mail: 
+    > Created Time: Tue 16 Aug 2016 09:30:22 GMT
  ************************************************************************/
 #include"client.h"
 
@@ -23,6 +23,8 @@ void log_user(struct message *a);
 int login_success(struct message *a);
 int Register(struct message *a);
 /////////////////////////////////////////////////////////////////////
+//
+struct message* send_ptr;
 
 int main(int argc,char *argv[])
 {
@@ -41,11 +43,6 @@ int main(int argc,char *argv[])
         fprintf(stderr,"Usage:%s hostname\a\n",argv[0]);
         exit(1);
     }
-    //if((host = gethostbyname(argv[1]))==NULL)
-    //{
-    //    fprintf(stderr,"Gethostname error!\n");
-    //    exit(1);
-    //}
     while(1)
     {
         if((sockfd = socket(AF_INET,SOCK_STREAM,0))<0)
@@ -62,7 +59,6 @@ int main(int argc,char *argv[])
         printf("error:inet_aton\n");
         exit(1);
         }
-        //my_addr.sin_addr = *((struct in_addr*)host->h_addr);
         if(connect(sockfd,(struct sockaddr *)(&my_addr),sizeof(my_addr)) == -1)
         {
             puts("连接失败");
@@ -77,8 +73,10 @@ int main(int argc,char *argv[])
                 while(n)
                 {
                     log_user(&a);
-                    if(strcmp(a.msg,"hello,admin")==0)//管理员登陆成功
+                    getchar();
+                    if(strcmp(a.msg,"hello,admin!")==0)//管理员登陆成功
                     {
+                        system("clear");
                         if(login_admin(&a) == 0)
                         {
                             return FAULT;
@@ -86,6 +84,7 @@ int main(int argc,char *argv[])
                     }
                     else if(strcmp(a.msg,"login,success!") == 0)
                     {
+                        system("clear");
                         if(login_success(&a) == 0)
                         {
                             return FAULT;
@@ -108,8 +107,9 @@ int main(int argc,char *argv[])
             case ex:
             {
                 close(fd);
+                close(sockfd);
                 puts("退出");
-                break;
+                exit(0);
             }
             default:
             {
@@ -136,127 +136,127 @@ int admin_chat(int sockfd,struct message *a)
     if((fd=open(chat_log,O_RDWR|O_CREAT|O_APPEND,0777)) < 0)
     {
         printf("打开聊天记录失败!");
-	exit(1);
+    exit(1);
     }
     setbuf(stdin,NULL);
     strcpy((*a).flag,"all");
     printf("尊敬的%s你好，如需帮助请输入：.help\n",locname);
     while(1)
-	{
-		memset((*a).msg,0,strlen((*a).msg));
-		memset(str,0,strlen(str));
-		usleep(100000);
-		printf("TO %s:\n",(*a).flag);
-		setbuf(stdin,NULL);
-		scanf("%s",str);
-		if(OK == help(str))                      //提示信息  
-		{
-		    continue;
-		}
-		strcpy((*a).name,locname);
-		strcpy(buf,(*a).flag);
-		cutStr(str,(*a).flag,15,(*a).msg,MAXLEN,'$');    //调用字符切割函数  
-		expression((*a).name,(*a).msg);               //表情替换函数 
-		common_use_words((*a).msg);                    //常用语使用函数
-		if(strcmp((*a).flag,"exit") == 0)
-		{
-		    return FAULT;
-		}
-		if(strcmp((*a).flag,"view") == 0)           
-		{
-		    send(sockfd,a,sizeof((*a)),0);       //请求查看在线用户
-	     	strcpy((*a).flag,buf);
-		    continue;
-		}
-		if(strcmp((*a).flag,"all") == 0)
-		{
-		    send(sockfd,a,sizeof(*a),0);        
-		    continue;
-		}
-	        if ((strcmp((*a).flag,"trans") == 0) && (savefilefd <=0))
-		{
-    		    if ((strcmp((*a).msg,"agree") == 0) && (savefilefd == 0))
-		    {
-		        char savefilename[MAXLEN];
-			strcpy((*a).addressee,filefromuser);
-			printf("请输入你想保存的文件名：\n");
-			do
-			{
-			    setbuf(stdin,NULL);
+    {
+        memset((*a).msg,0,strlen((*a).msg));
+        memset(str,0,strlen(str));
+        usleep(100000);
+        printf("TO %s:\n",(*a).flag);
+        setbuf(stdin,NULL);
+        scanf("%s",str);
+        if(OK == help(str))                      //提示信息  
+        {
+            continue;
+        }
+        strcpy((*a).name,locname);
+        strcpy(buf,(*a).flag);
+        cutStr(str,(*a).flag,15,(*a).msg,MAXLEN,'$');    //调用字符切割函数  
+        expression((*a).name,(*a).msg);               //表情替换函数 
+        common_use_words((*a).msg);                    //常用语使用函数
+        if(strcmp((*a).flag,"exit") == 0)
+        {
+            return FAULT;
+        }
+        if(strcmp((*a).flag,"view") == 0)           
+        {
+            send(sockfd,a,sizeof((*a)),0);       //请求查看在线用户
+             strcpy((*a).flag,buf);
+            continue;
+        }
+        if(strcmp((*a).flag,"all") == 0)
+        {
+            send(sockfd,a,sizeof(*a),0);        
+            continue;
+        }
+            if ((strcmp((*a).flag,"trans") == 0) && (savefilefd <=0))
+        {
+                if ((strcmp((*a).msg,"agree") == 0) && (savefilefd == 0))
+            {
+                char savefilename[MAXLEN];
+            strcpy((*a).addressee,filefromuser);
+            printf("请输入你想保存的文件名：\n");
+            do
+            {
+                setbuf(stdin,NULL);
                 scanf("%s",savefilename);
-			    savefilefd = open(savefilename,O_RDWR|O_CREAT|O_EXCL,0777);
-			    if(savefilefd == -1)
-			    {
-			        printf("文件已存在，你重新输入：\n");
-			    }
-			}while(savefilefd == -1);
-			if(savefilefd < 0)
-			{
-			    printf("接收文件失败!\n");
-			    savefilefd = -1;
-			}
-			else
-			{
-			    strcpy((*a).msg,"agree");
-			    send(sockfd,a,sizeof(*a),0);
-			    printf("文件接收中……\n");
-			}
-		}
-			else
-			{
-				memset(str,0,strlen(str));
-				cutStr((*a).msg,(*a).addressee,20,str,MAXLEN,'$');
-				if (str[0] != '\0' && (*a).addressee[0] != '\0')
-				{
-					char transfileallname[22];
-					sprintf(transfileallname,"./%s",str);
-					savefilefd = open(str,O_RDWR,0666);
-					if(savefilefd < 0)
-					{
-						printf("打开文件失败!\n");
-						savefilefd = -1;
-					}
-        			else
-					{
-						memset((*a).msg,0,strlen((*a).msg));
-						strcpy((*a).msg,str);
-						send(sockfd,a,sizeof(*a),0);
-					}
-				}
-				else
-				{
-					strcpy((*a).msg,"disagree");
-					strcpy((*a).name,locname);
-					strcpy((*a).addressee,filefromuser);
-					send(sockfd,a,sizeof(*a),0);
-				}
-			}
-			strcpy((*a).flag,buf);
-			continue;
-		}
-		if (strcmp((*a).flag,"trans") == 0)
-		{
-			strcpy((*a).flag,buf);
-		}
-		else
-		{
-			strcpy(buf,(*a).flag);
-			strcpy((*a).addressee,(*a).flag);
-			strcpy((*a).flag,"personal");
-			send(sockfd,a,sizeof(*a),0);             //发送私信
-			strcpy((*a).flag,buf);
-			time (&timep);
-			memset(str,0,strlen(str));
-			sprintf(str,"%s你对 %s 说: %s\n",ctime(&timep),(*a).flag,(*a).msg);
-			printf("%s",str);
-			write(fd,str,strlen(str));              //写入聊天记录文件中
-		}
-	}
+                savefilefd = open(savefilename,O_RDWR|O_CREAT|O_EXCL,0777);
+                if(savefilefd == -1)
+                {
+                    printf("文件已存在，你重新输入：\n");
+                }
+            }while(savefilefd == -1);
+            if(savefilefd < 0)
+            {
+                printf("接收文件失败!\n");
+                savefilefd = -1;
+            }
+            else
+            {
+                strcpy((*a).msg,"agree");
+                send(sockfd,a,sizeof(*a),0);
+                printf("文件接收中……\n");
+            }
+        }
+            else
+            {
+                memset(str,0,strlen(str));
+                cutStr((*a).msg,(*a).addressee,20,str,MAXLEN,'$');
+                if (str[0] != '\0' && (*a).addressee[0] != '\0')
+                {
+                    char transfileallname[22];
+                    sprintf(transfileallname,"./%s",str);
+                    savefilefd = open(str,O_RDWR,0666);
+                    if(savefilefd < 0)
+                    {
+                        printf("打开文件失败!\n");
+                        savefilefd = -1;
+                    }
+                    else
+                    {
+                        memset((*a).msg,0,strlen((*a).msg));
+                        strcpy((*a).msg,str);
+                        send(sockfd,a,sizeof(*a),0);
+                    }
+                }
+                else
+                {
+                    strcpy((*a).msg,"disagree");
+                    strcpy((*a).name,locname);
+                    strcpy((*a).addressee,filefromuser);
+                    send(sockfd,a,sizeof(*a),0);
+                }
+            }
+            strcpy((*a).flag,buf);
+            continue;
+        }
+        if (strcmp((*a).flag,"trans") == 0)
+        {
+            strcpy((*a).flag,buf);
+        }
+        else
+        {
+            strcpy(buf,(*a).flag);
+            strcpy((*a).addressee,(*a).flag);
+            strcpy((*a).flag,"personal");
+            send(sockfd,a,sizeof(*a),0);             //发送私信
+            strcpy((*a).flag,buf);
+            time (&timep);
+            memset(str,0,strlen(str));
+            sprintf(str,"%s你对 %s 说: %s\n",ctime(&timep),(*a).flag,(*a).msg);
+            printf("%s",str);
+            write(fd,str,strlen(str));              //写入聊天记录文件中
+        }
+    }
 }
 
 /***************************************************
 函数名:admin_kick
-功能:管理员替人操作
+功能:管理员踢人操作
 传入参数:int sockfd,struct message *a
 返回值:成功返回1，否则返回0
 ***************************************************/
@@ -266,20 +266,20 @@ int admin_kick(int sockfd,struct message *a)
     do
     {
         printf("你想把谁踢出聊天室:\n");
-	    setbuf(stdin,NULL);         //清空缓存
-	    scanf("%s",str);                  
+        setbuf(stdin,NULL);         //清空缓存
+        scanf("%s",str);                  
     }while(strcmp(str,"admin") == 0);                  
-	if(strlen(str) == 0)           //str为空
-	{
+    if(strlen(str) == 0)           //str为空
+    {
         return FAULT;
-	}
-	else
-	{
+    }
+    else
+    {
         strcpy((*a).flag,"admin_kick");            //管理员踢人标志
         strcpy((*a).msg,str);
-	    send(sockfd,a,sizeof(struct message),0);   //客户端把要求传给服务器       
-	}
-	return OK;
+        send(sockfd,a,sizeof(struct message),0);   //客户端把要求传给服务器       
+    }
+    return OK;
 }
 /***************************************************
 函数名:admin_screen
@@ -293,20 +293,20 @@ int admin_screen(int sockfd,struct message *a)
     do
     {
         printf("你想禁言／解禁谁:\n");
-      	setbuf(stdin,NULL);
-	    scanf("%s",str);
+          setbuf(stdin,NULL);
+        scanf("%s",str);
     }while(strcmp(str,"admin") == 0);
-	if(strlen(str) == 0) 
-	{
-		return FAULT;
-	}
-	else
-	{
+    if(strlen(str) == 0) 
+    {
+        return FAULT;
+    }
+    else
+    {
         strcpy((*a).flag,"admin_screen");        //禁言标志
         strcpy((*a).msg,str);
-	    send(sockfd,a,sizeof(struct message),0);  
-	}
-	return OK;
+        send(sockfd,a,sizeof(struct message),0);  
+    }
+    return OK;
 }
 /***************************************************
 函数名:login_admin
@@ -316,58 +316,58 @@ int admin_screen(int sockfd,struct message *a)
 ***************************************************/
 int login_admin(struct message *a)
 {
-	int do_number;						
-	pthread_t pid;
-	memset((*a).msg,0,strlen((*a).msg));                              //清空消息
-	strcpy(chat_log,"admin");                                          //聊天记录名
-	pthread_create(&pid,NULL,(void*)handlerecvmsg,(void *)&sockfd);     //创建线程    
-	while(1)
-	{
-		usleep(5000);
-		do
-		{
-			printf("1.踢人  2.禁言／解禁  3.查看在线用户  4.聊天  5.退出\n");
-			printf("please input:\n");       
-			setbuf(stdin,NULL);                                 //清空缓存
-			scanf(" %d",&do_number);
-			system("clear");
-			setbuf(stdin,NULL);                                 //清空缓存
-		}while((do_number != 1) && (do_number != 2) && (do_number != 3) && (do_number != 4)&& (do_number != 5));
-	    switch(do_number)
-		{
-			case 1:
-		    {
-			    admin_kick(sockfd,a);               
-			    break;
-			}
-			case 2:
-			{
-			    admin_screen(sockfd,a);       
-		        break;
-			}
-			case 3:
-		    {
-			    strcpy((*a).flag,"view");
-			    send(sockfd,a,sizeof(*a),0);
-			    break;
-		    }
-			case 4:
-			{
-				admin_chat(sockfd,a);
-		        break;
-			}
-    	    case 5:
-		    {
-		        close(sockfd);
-			    return FAULT;
-		    }
-			default:
-			{
-	    		break;
-			}
-		}
-	}
-	return OK;
+    int do_number;                        
+    pthread_t pid;
+    memset((*a).msg,0,strlen((*a).msg));                              //清空消息
+    strcpy(chat_log,"admin");                                          //聊天记录名
+    pthread_create(&pid,NULL,(void*) handlerecvmsg,(void *)&sockfd);     //创建线程    
+    while(1)
+    {
+        usleep(5000);
+        do
+        {
+            printf("1.踢人  2.禁言／解禁  3.查看在线用户  4.聊天  5.退出\n");
+            printf("please input:\n");       
+            setbuf(stdin,NULL);                                 //清空缓存
+            scanf(" %d",&do_number);
+            system("printf\"\ec\"");
+            setbuf(stdin,NULL);                                 //清空缓存
+        }while((do_number != 1) && (do_number != 2) && (do_number != 3) && (do_number != 4)&& (do_number != 5));
+        switch(do_number)
+        {
+            case 1:
+            {
+                admin_kick(sockfd,a);               
+                break;
+            }
+            case 2:
+            {
+                admin_screen(sockfd,a);       
+                break;
+            }
+            case 3:
+            {
+                strcpy((*a).flag,"view");
+                send(sockfd,a,sizeof(*a),0);
+                break;
+            }
+            case 4:
+            {
+                admin_chat(sockfd,a);
+                break;
+            }
+            case 5:
+            {
+                close(sockfd);
+                return FAULT;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    return OK;
 }
 /***************************************************
 函数名:handlerecvfile
@@ -394,7 +394,7 @@ void handlerecvfile(struct message *msg)
         if(n < recvmsg.size && n > 0)
         {
             printf("接收文件出错!\n");
-	    return ;
+        return ;
         }
         }
     return ;
@@ -425,7 +425,7 @@ void handlesendfile()
         else if (filedata.size > 0)
         {
             send(sockfd,&filedata,sizeof(struct message),0);     //发送文件数据    
-	        usleep(100000);              
+            usleep(100000);              
         }
         else
         {
@@ -468,35 +468,68 @@ void handlerecvmsg(int *sockfd)
         else if (strcmp(recvmsg.flag,"all") == 0)             //接受群发信息
         {
         time (&timep);
-	    memset(str,0,strlen(str));
+        memset(str,0,strlen(str));
         sprintf(str,"%s%s 对大家说: %s\n",ctime(&timep),recvmsg.name,recvmsg.msg);
-	    puts(str);
-	    write(fd,str,strlen(str));                          //聊天信息写入文件
+        puts(str);
+        write(fd,str,strlen(str));                          //聊天信息写入文件
         }
         else if (strcmp(recvmsg.flag,"personal") == 0)         //接受私信 
         {
             time (&timep);
-	        memset(str,0,strlen(str));
+            memset(str,0,strlen(str));
             sprintf(str,"%s%s 对你说: %s\n",ctime(&timep),recvmsg.name,recvmsg.msg);
-	        printf("%s\n",str);
-	        write(fd,str,strlen(str));                         //保存聊天记录
+            printf("%s\n",str);
+            write(fd,str,strlen(str));                         //保存聊天记录
         }
-	else if (strcmp(recvmsg.flag,"sermsg") == 0)          //系统提示信息
+        else if (strcmp(recvmsg.flag,"view_friend") == 0)//查看好友状态
+        {
+            time(&timep);
+            memset(str,0,strlen(str));
+            sprintf(str,"%s好友状态:\n%s\n",ctime(&timep),recvmsg.msg);
+            printf("%s\n",str);
+            continue;
+        }
+    else if (strcmp(recvmsg.flag,"sermsg") == 0)          //系统提示信息
         {
             time (&timep);
-	        memset(str,0,strlen(str));
+            memset(str,0,strlen(str));
             sprintf(str,"%s系统信息: %s\n",ctime(&timep),recvmsg.msg);
-	        printf("%s\n",str);
-	        write(fd,str,strlen(str));
-	    continue;
+            printf("%s\n",str);
+            write(fd,str,strlen(str));
+        continue;
         }
         else if (strcmp(recvmsg.flag,"view") == 0)       //收到查看在线用户标志
         {
             time (&timep);
-	        memset(str,0,strlen(str));
+            memset(str,0,strlen(str));
             sprintf(str,"%s在线用户:\n%s\n",ctime(&timep),recvmsg.msg);
-	        printf("%s\n",str);
+            printf("%s\n",str);
             continue;
+        }
+        else if(strcmp(recvmsg.flag,"friend_wanted") == 0)//收到好友请求
+        {
+            printf("收到好友请求\n");
+            struct message * send_message;
+            send_message = (struct message *)malloc(sizeof(struct message));
+            char choose[MAXLEN];
+            strcpy(send_message->flag,recvmsg.flag);
+            strcpy(send_message->name,recvmsg.name);
+            strcpy(send_message->addressee,recvmsg.addressee);
+            printf("%s想加你为好友，是否同意接受？（yes/no）\n",recvmsg.name);
+            send_ptr=send_message;
+            //scanf("%s",choose);
+            //printf("scanf is %s \n",choose);
+            //if(strcmp(choose,"yes") == 0)
+            //{
+            //    strcpy(send_message->msg,"yes");
+            //}
+            //else    
+            //{
+            //    strcpy(send_message->msg,"no");
+            //}
+            //send(connfd,send_message,sizeof(struct message),0);
+            //printf("已向%s发送回复\n",send_message->name);
+            //continue;
         }
         else if (strcmp(recvmsg.flag,"trans") == 0)          //传输文件标志
         {
@@ -504,7 +537,7 @@ void handlerecvmsg(int *sockfd)
             if (strcmp(recvmsg.msg,"agree") == 0)          //同意接受文件标志
             {
                 strcpy(filefromname,recvmsg.name);
-		printf("文件传送中……\n");
+        printf("文件传送中……\n");
                 //创建线程发送文件
                 pthread_create(&pid,NULL,(void *)handlesendfile,NULL);     //创建发送文件线程
             }
@@ -532,8 +565,8 @@ void handlerecvmsg(int *sockfd)
         else if(strcmp(recvmsg.flag,"transf") == 0)               
         {
             pthread_t pid_transf;
-	        pthread_create(&pid_transf,NULL,(void *)handlerecvfile,&recvmsg); //创建文件传输线程
-	        pthread_join(pid_transf,NULL);			
+            pthread_create(&pid_transf,NULL,(void *)handlerecvfile,&recvmsg); //创建文件传输线程
+            pthread_join(pid_transf,NULL);            
             continue;
         }
         else
@@ -582,11 +615,11 @@ void cutStr(char str[],char left[], int n, char right[],int max, char c)
     left[i] = '\0';
     if(j < max)
     {
-		right[j-i-1] = '\0';
-    }	
+        right[j-i-1] = '\0';
+    }    
     else
     {
-		right[max] = '\0';
+        right[max] = '\0';
     }
 }
 
@@ -599,46 +632,50 @@ void cutStr(char str[],char left[], int n, char right[],int max, char c)
 void common_use_words(char msg[])
 {
     int i=0,j=0;
-	char common[MAXLEN];
+    char common[MAXLEN];
     char tmp[MAXLEN];
-	if(msg[0] == '/')
-	{
-		strcpy(tmp,msg);
-		memset(msg,0,strlen(msg));
-		for(i=1;i<MAXLEN;i++)
-		{
-			if(tmp[i] != '/')
-			{
-			    msg[i-1] = tmp[i];
-			}
-			else
-			{
-			    break;
-			}
-		}
-		msg[i-1] = ',';
-		msg[i] = '\0';
-		i++;
-		for(j=0;i<MAXLEN;i++,j++)
-		{
-		    if(tmp[i] != '\0')
-		    {
-		        common[j] = tmp[i];
-		    }
-		    else
-		    {
-			break;
-		    }
-		}
-		common[j] = '\0';
-		if(strcmp(common,"welcome") == 0)
-		{
-		    strcat(msg,"欢迎来到我们的聊天室^_^");         //连接字符串
-			return ;
-		}
-		strcat(msg,common);
-		
-	}
+    if(msg[0] == '/')
+    {
+        strcpy(tmp,msg);
+        memset(msg,0,strlen(msg));
+        for(i=1;i<MAXLEN;i++)
+        {
+            if(tmp[i] != '/')
+            {
+                msg[i-1] = tmp[i];
+            }
+            else
+            {
+                break;
+            }
+        }
+        msg[i-1] = ',';
+        msg[i] = '\0';
+        i++;
+        for(j=0;i<MAXLEN;i++,j++)
+        {
+            if(tmp[i] != '\0')
+            {
+                common[j] = tmp[i];
+            }
+            else
+            {
+            break;
+            }
+        }
+        common[j] = '\0';
+        if(strcmp(common,"welcome") == 0)
+        {
+            strcat(msg,"欢迎来到我们的聊天室^_^");         //连接字符串
+            return ;
+        }
+        if(strcmp(common,"傻逼") == 0)
+        {
+            strcat(msg,"××");
+        }                                    
+        strcat(msg,common);
+        
+    }
 }
 /***************************************************
 函数名:expression
@@ -648,30 +685,30 @@ void common_use_words(char msg[])
 ***************************************************/
 void expression(char name[],char msg[])
 {
-	if(strcmp(msg,":)") == 0)
-	{
+    if(strcmp(msg,":)") == 0)
+    {
         sprintf(msg,"%s :-D",name);
-	}
+    }
     if(strcmp(msg,":(") == 0)
-	{
-	    sprintf(msg,"%s >_<",name);
-	}
-	if(strcmp(msg,"囧") == 0)
-	{
-	    sprintf(msg,"%s o(╯□╰)o",name);
-	}
-	if(strcmp(msg,"哈哈") == 0)
-	{
-	    sprintf(msg,"O(∩_∩)O哈哈~");
-	}
-	if(strcmp(msg,"汗") == 0)
-	{
-	    sprintf(msg,"~_~|||");
-	}
-	if(strcmp(msg,"晕") == 0)
-	{
-	    sprintf(msg,"＠_＠");
-	}
+    {
+        sprintf(msg,"%s >_<",name);
+    }
+    if(strcmp(msg,"囧") == 0)
+    {
+        sprintf(msg,"%s o(╯□╰)o",name);
+    }
+    if(strcmp(msg,"哈哈") == 0)
+    {
+        sprintf(msg,"O(∩_∩)O哈哈~");
+    }
+    if(strcmp(msg,"汗") == 0)
+    {
+        sprintf(msg,"~_~|||");
+    }
+    if(strcmp(msg,"晕") == 0)
+    {
+        sprintf(msg,"＠_＠");
+    }
 }
 
 /***************************************************
@@ -683,21 +720,21 @@ void expression(char name[],char msg[])
 int Interface()
 {
     int do_number;
-	do
-	{
-		system("clear");
-		printf("----------------------------------\n");
-		printf("        欢迎进入聊天室	  \n");
-		printf("	   1.登录                 \n");
-		printf("	   2.注册			      \n");
-		printf("	   3.退出			      \n");
-		printf("----------------------------------\n");
-		printf("请选择:\n");
-		setbuf(stdin,NULL);
-		scanf(" %d",&do_number);
-		setbuf(stdin,NULL);
-	}while((do_number != 1) && (do_number != 2) && (do_number != 3));
-	return do_number;
+    do
+    {
+        system("printf \"\ec\"");
+        printf("----------------------------------\n");
+        printf("        欢迎进入聊天室      \n");
+        printf("       1.登录                 \n");
+        printf("       2.注册                  \n");
+        printf("       3.退出                  \n");
+        printf("----------------------------------\n");
+        printf("请选择:\n");
+        setbuf(stdin,NULL);
+        scanf(" %d",&do_number);
+        setbuf(stdin,NULL);
+    }while((do_number != 1) && (do_number != 2) && (do_number != 3));
+    return do_number;
 }
 /***************************************************
 函数名:help
@@ -716,13 +753,15 @@ int help(char str[])
         printf("trans$agree------------同意接收文件\n");
         printf("trans$disagree---------不同意接收文件\n");
         printf("view$------------------查看在线用户\n");
-        printf("exit$------------------退出\n");                 
-		return OK;
+        printf("view_friend$-----------查看好友状态\n");
+        printf("add_friend$------------添加好友\n");
+        printf("exit$------------------退出\n");
+        return OK;
     }
-	else
-	{
-	    return FAULT;
-	}
+    else
+    {
+        return FAULT;
+    }
 }
 /***************************************************
 函数名:log_user
@@ -734,13 +773,13 @@ void log_user(struct message *a)
 {
     do
     {
-		printf("请输入用户名（10字以内）:\n");
-		memset((*a).name,0,strlen((*a).name));
-		scanf("%s",(*a).name);
-		strcpy(locname,(*a).name);
-		printf("请输入密码（20位以内）:\n");
-		memset((*a).msg,0,strlen((*a).msg));
-		scanf("%s",(*a).msg);
+        printf("请输入用户名（10字以内）:\n");
+        memset((*a).name,0,strlen((*a).name));
+        scanf("%s",(*a).name);
+        strcpy(locname,(*a).name);
+        printf("请输入密码（20位以内）:\n");
+        memset((*a).msg,0,strlen((*a).msg));
+        scanf("%s",(*a).msg);
     }while(strlen((*a).name)>20 || strlen((*a).msg)>20);
     strcpy((*a).flag,"login");
     send(sockfd,a,sizeof(*a),0);                 //向服务器发送登录信息
@@ -764,124 +803,166 @@ int login_success(struct message *a)
     if((fd=open(chat_log,O_RDWR|O_CREAT|O_APPEND,0777)) < 0)
     {
         printf("打开聊天记录失败!");
-	exit(1);
+    exit(1);
     }
+
     pthread_create(&pid,NULL,(void*)handlerecvmsg,(void *)&sockfd);         //创建接受消息线程
     setbuf(stdin,NULL);
     strcpy((*a).flag,"all");
     printf("尊敬的%s你好，如需帮助请输入：.help\n",locname);
-	while(1)
-	{
-		memset((*a).msg,0,strlen((*a).msg));
-		memset(str,0,strlen(str));
-		usleep(100000);
-		printf("TO %s:\n",(*a).flag);
-		setbuf(stdin,NULL);
-		scanf("%s",str);
-		if(OK == help(str))                      //提示信息  
-		{
-		    continue;
-		}
-		strcpy((*a).name,locname);
-		strcpy(buf,(*a).flag);
-		cutStr(str,(*a).flag,15,(*a).msg,MAXLEN,'$');    //调用字符切割函数  
-		expression((*a).name,(*a).msg);               //表情替换函数 
-		common_use_words((*a).msg);                    //常用语使用函数
-		if(strcmp((*a).flag,"exit") == 0)
-		{
-		    return FAULT;
-		}
-		if(strcmp((*a).flag,"view") == 0)           
-		{
-		    send(sockfd,a,sizeof((*a)),0);       //请求查看在线用户
-	     	strcpy((*a).flag,buf);
-		    continue;
-		}
-		if(strcmp((*a).flag,"all") == 0)
-		{
-		    send(sockfd,a,sizeof(*a),0);        
-		    continue;
-		}
-	        if ((strcmp((*a).flag,"trans") == 0) && (savefilefd <=0))
-		{
-    		    if ((strcmp((*a).msg,"agree") == 0) && (savefilefd == 0))
-		    {
-		        char savefilename[MAXLEN];
-			    strcpy((*a).addressee,filefromuser);
-			    printf("请输入你想保存的文件名：\n");
-			do
-			{
-			    setbuf(stdin,NULL);
+    while(1)
+    {
+        memset((*a).msg,0,strlen((*a).msg));
+        memset(str,0,strlen(str));
+        usleep(100000);
+        printf("TO %s:\n",(*a).flag);
+        setbuf(stdin,NULL);
+        scanf("%s",str);
+        if(OK == help(str))                      //提示信息  
+        {
+            continue;
+        }
+        strcpy((*a).name,locname);
+        strcpy(buf,(*a).flag);
+        cutStr(str,(*a).flag,15,(*a).msg,MAXLEN,'$');    //调用字符切割函数  
+        expression((*a).name,(*a).msg);               //表情替换函数 
+        common_use_words((*a).msg);                    //常用语使用函数
+        printf("now flag is %s\n",a->flag);
+        if(strcmp((*a).flag,"exit") == 0)
+        {
+            return FAULT;
+        }
+        if(strcmp((*a).flag,"view") == 0)           
+        {
+            send(sockfd,a,sizeof((*a)),0);       //请求查看在线用户
+             strcpy((*a).flag,buf);
+            continue;
+        }
+        if(strcmp(a->flag,"add_friend") == 0)//添加好友
+        {
+            printf("请输入邀请好友用户名：");
+            scanf("%s",a->addressee);
+            //strcpy(a->flag,buf);
+            send(sockfd,a,sizeof(*a),0);
+            strcpy(a->flag,buf);
+            printf("请求已经发送\n");
+            continue;
+        }
+        if(strcmp((*a).flag,"view_friend") == 0)//查看好友
+        {
+            //printf("VIEW_FRIEND!");
+            send(sockfd,a,sizeof(*a),0);
+            strcpy(a->flag,buf);
+            continue;
+        }
+
+        if( (send_ptr!= NULL) &&( strcmp(send_ptr->flag,"friend_wanted") == 0))
+        {
+            if(strcmp(str,"yes") == 0)
+            {
+                strcpy(send_ptr->msg,"yes");
+            }
+            else
+            {
+                strcmp(send_ptr->msg,"no");
+            }
+            send(sockfd,send_ptr,sizeof(*send_ptr),0);
+            printf("好友请求已经发送\n");
+            free(send_ptr);
+            send_ptr = NULL;
+            continue;
+        }
+
+        if(strcmp((*a).flag,"all") == 0)
+        {
+                        send(sockfd,a,sizeof(*a),0);        
+            continue;
+        }       
+            if ((strcmp((*a).flag,"trans") == 0) && (savefilefd <=0))
+        {
+                if ((strcmp((*a).msg,"agree") == 0) && (savefilefd == 0))
+            {
+                char savefilename[MAXLEN];
+                strcpy((*a).addressee,filefromuser);
+                printf("请输入你想保存的文件名：\n");
+            int file_temp =3;
+            do
+            {
+                setbuf(stdin,NULL);
                 scanf("%s",str);
-			    savefilefd = open(savefilename,O_RDWR|O_CREAT|O_EXCL,0777);
-			    if(savefilefd == -1)
-			    {
-			        printf("文件已存在，你重新输入：\n");
-			    }
-			}while(savefilefd == -1);
-			if(savefilefd < 0)
-			{
-			    printf("接收文件失败!\n");
-			    savefilefd = -1;
-			}
-			else
-			{
-			    strcpy((*a).msg,"agree");
-			    send(sockfd,a,sizeof(*a),0);
-			    printf("文件接收中……\n");
-			}
-		}
-			else
-			{
-				memset(str,0,strlen(str));
-				cutStr((*a).msg,(*a).addressee,20,str,MAXLEN,'$');
-				if (str[0] != '\0' && (*a).addressee[0] != '\0')
-				{
-					char transfileallname[22];
-					sprintf(transfileallname,"./%s",str);
-					savefilefd = open(str,O_RDWR,0666);
-					if(savefilefd < 0)
-					{
-						printf("打开文件失败!\n");
-						savefilefd = -1;
-					}
-        			else
-					{
-						memset((*a).msg,0,strlen((*a).msg));
-						strcpy((*a).msg,str);
-						send(sockfd,a,sizeof(*a),0);
-					}
-				}
-				else
-				{
-					strcpy((*a).msg,"disagree");
-					strcpy((*a).name,locname);
-					strcpy((*a).addressee,filefromuser);
-					send(sockfd,a,sizeof(*a),0);
-				}
-			}
-			strcpy((*a).flag,buf);
-			continue;
-		}
-		if (strcmp((*a).flag,"trans") == 0)
-		{
-			strcpy((*a).flag,buf);
-		}
-		else
-		{
-			strcpy(buf,(*a).flag);
-			strcpy((*a).addressee,(*a).flag);
-			strcpy((*a).flag,"personal");
-			send(sockfd,a,sizeof(*a),0);             //发送私信
-			strcpy((*a).flag,buf);
-			time (&timep);
-			memset(str,0,strlen(str));
-			sprintf(str,"%s你对 %s 说: %s\n",ctime(&timep),(*a).flag,(*a).msg);
-			printf("%s",str);
-			write(fd,str,strlen(str));              //写入聊天记录文件中
-		}
-	}
-	return OK;
+                savefilefd = open(savefilename,O_RDWR|O_CREAT|O_EXCL,0777);
+                if(savefilefd == -1)
+                {
+                    perror("open file error ");
+                    file_temp --;
+                }
+                if (file_temp == 0)
+                break;
+
+            }while(savefilefd == -1);
+            if(savefilefd < 0)
+            {
+                printf("接收文件失败!\n");
+                savefilefd = -1;
+            }
+            else
+            {
+                strcpy((*a).msg,"agree");
+                send(sockfd,a,sizeof(*a),0);
+                printf("文件接收中……\n");
+            }
+        }
+            else
+            {
+                memset(str,0,strlen(str));
+                cutStr((*a).msg,(*a).addressee,20,str,MAXLEN,'$');
+                if (str[0] != '\0' && (*a).addressee[0] != '\0')
+                {
+                    char transfileallname[22];
+                    sprintf(transfileallname,"./%s",str);
+                    savefilefd = open(str,O_RDWR,0666);
+                    if(savefilefd < 0)
+                    {
+                        printf("打开文件失败!\n");
+                        savefilefd = -1;
+                    }
+                    else
+                    {
+                        memset((*a).msg,0,strlen((*a).msg));
+                        strcpy((*a).msg,str);
+                        send(sockfd,a,sizeof(*a),0);
+                    }
+                }
+                else
+                {
+                    strcpy((*a).msg,"disagree");
+                    strcpy((*a).name,locname);
+                    strcpy((*a).addressee,filefromuser);
+                    send(sockfd,a,sizeof(*a),0);
+                }
+            }
+            strcpy((*a).flag,buf);
+            continue;
+        }
+        if (strcmp((*a).flag,"trans") == 0)
+        {
+            strcpy((*a).flag,buf);
+        }
+        else
+        {
+            strcpy(buf,(*a).flag);
+            strcpy((*a).addressee,(*a).flag);
+            strcpy((*a).flag,"personal");
+            send(sockfd,a,sizeof(*a),0);             //发送私信
+            strcpy((*a).flag,buf);
+            time (&timep);
+            memset(str,0,strlen(str));
+            sprintf(str,"%s你对 %s 说: %s\n",ctime(&timep),(*a).flag,(*a).msg);
+            printf("%s",str);
+            write(fd,str,strlen(str));              //写入聊天记录文件中
+        }
+    }
+    return OK;
 }
 /***************************************************
 函数名:Register
@@ -892,22 +973,22 @@ int login_success(struct message *a)
 int Register(struct message *a)
 {
     char password_t[MAXLEN];
-	do
-	{
-		printf("请输入用户名（10字以内）:\n");
-		memset((*a).name,0,strlen((*a).name));
-		setbuf(stdin,NULL);
-		scanf("%s",(*a).name);
-	}while(strlen((*a).name)>20);
+    do
+    {
+        printf("请输入用户名（10字以内）:\n");
+        memset((*a).name,0,strlen((*a).name));
+        setbuf(stdin,NULL);
+        scanf("%s",(*a).name);
+    }while(strlen((*a).name)>20);
     while(1)
     {
         printf("请输入密码（20位以内）:\n");
-	    memset((*a).msg,0,strlen((*a).msg));
-		setbuf(stdin,NULL);
+        memset((*a).msg,0,strlen((*a).msg));
+        setbuf(stdin,NULL);
         scanf("%s",(*a).msg);
         printf("请再次输入密码（20位以内）:\n");
-		memset(password_t,0,strlen(password_t));
-		setbuf(stdin,NULL);
+        memset(password_t,0,strlen(password_t));
+        setbuf(stdin,NULL);
         scanf("%s",password_t);
         if(strcmp((*a).msg,password_t) != 0 || strlen((*a).msg)>20 || strlen(password_t)>20)
         {

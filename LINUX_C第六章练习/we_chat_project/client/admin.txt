@@ -1,0 +1,70 @@
+Thu Aug 18 16:51:36 2016
+admin 对大家说: hello
+Thu Aug 18 16:51:40 2016
+kid 对大家说: hello
+Thu Aug 18 16:52:08 2016
+admin 对大家说: hello
+Thu Aug 18 16:52:17 2016
+kid 对大家说: O(∩_∩)O哈哈~
+Thu Aug 18 16:52:28 2016
+admin 对大家说: 哭
+Thu Aug 18 16:52:35 2016
+admin 对大家说: 伤心
+Thu Aug 18 16:52:39 2016
+admin 对大家说: admin o(╯□╰)o
+Thu Aug 18 16:53:06 2016
+admin 对大家说: exit
+Thu Aug 18 16:53:08 2016
+admin 对大家说: exit
+Thu Aug 18 16:53:09 2016
+admin 对大家说: exit
+Thu Aug 18 16:53:11 2016
+admin 对大家说: exit
+Thu Aug 18 16:53:28 2016
+系统信息: kid 被管理员禁言了!
+Thu Aug 18 16:53:43 2016
+系统信息: kid 被管理员解禁!
+Thu Aug 18 16:54:24 2016
+系统信息: 欢迎 yang 进入聊天室!
+Thu Aug 18 16:54:26 2016
+yang 对大家说: helo
+Thu Aug 18 16:54:57 2016
+你对 yang 说: 你好
+Thu Aug 18 16:55:07 2016
+kid 对大家说: nihao
+Thu Aug 18 16:56:23 2016
+yang 对大家说: trans
+Thu Aug 18 16:56:49 2016
+yang 对大家说: ok
+Thu Aug 18 20:38:10 2016
+admin 对大家说: ./help
+Thu Aug 18 20:39:15 2016
+系统信息: ja 被管理员解禁!
+Fri Aug 19 00:38:50 2016
+test 对大家说: hi
+Fri Aug 19 00:39:32 2016
+test 对大家说: hi
+Fri Aug 19 00:41:07 2016
+系统信息: kid 被管理员禁言了!
+Fri Aug 19 11:16:56 2016
+admin 对大家说: hi
+Sun Sep  4 11:16:13 2016
+admin 对大家说: glad
+Sun Sep  4 11:16:13 2016
+admin 对大家说: to
+Sun Sep  4 11:16:13 2016
+admin 对大家说: see
+Sun Sep  4 11:16:13 2016
+admin 对大家说: you
+Sun Sep  4 11:16:43 2016
+user1 对大家说: o
+Sun Sep  4 11:16:43 2016
+user1 对大家说: o
+Sun Sep  4 11:18:32 2016
+admin 对大家说: 大家好
+Sun Sep  4 11:27:23 2016
+系统信息: kid 被管理员禁言了!
+Sun Sep  4 11:27:39 2016
+user1 对大家说: hi
+Sun Sep  4 11:28:02 2016
+系统信息: kid 被管理员解禁!

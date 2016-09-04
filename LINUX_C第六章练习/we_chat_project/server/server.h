@@ -34,6 +34,12 @@
 #define LOG_ADMIN 1
 #define LOG_FAULT -1
 
+/*用户链表结构体*/
+typedef struct u_node
+{
+    char name[MAX_LEN];
+    struct u_node *next;
+}User_list;
 /*用户结构体*/
 typedef  struct struct_clientinf
 {
@@ -43,8 +49,7 @@ typedef  struct struct_clientinf
     struct sockaddr_in add_in;
     pthread_t pid;
     int speak;
-    struct User_list *friend_list;
-    struct Group_list *group_list;
+    User_list *friend_list;
 }clientinf;
 typedef clientinf datatype;
 
@@ -55,12 +60,6 @@ typedef struct _LNode
     struct _LNode *next;
 }LNode,*LinkList;
 
-/*用户链表结构体*/
-typedef struct u_node
-{
-    char name[MAX_LEN];
-    struct u_node *next;
-}User_list;
 
 /*消息结构体*/
 struct message

@@ -26,10 +26,6 @@ int server_reg(struct message *a, clientinf *clientNode);
 void server_trans(struct message *a,clientinf *clientNode);
 void server_transf(struct message *a);
 int server_view(struct message *a, clientinf *clientNode);
-User_list * get_friend_list(char * name);
-void friend_view(struct message *a ,clientinf *clientNode );
-int add_friend( struct message *a,clientinf *clientNode);
-void recv_friend(struct message *a,clientinf *clientNode);
 ////独是一个人的必修课，好好享受这份孤独，才发现音乐如此美好。//////
 int main(void)
 {
@@ -254,25 +250,6 @@ int main(void)
 					    server_transf(&a);        /*传送文件*/
 			            continue;
 		            }
-                    else if (strcmp(a.flag,"friend_wanted") == 0)//接受好友邀请添
-                    {
-                        printf("收到好友请求确认\n");
-                        recv_friend(&a,&clientNode);
-                        continue;
-                    }
-                    else if (strcmp(a.flag,"view_friend") == 0)
-                    {//查看好友在线情况
-                        printf("view!\n");
-                        friend_view(&a,&clientNode);
-                        continue;
-                    }
-                    else if (strcmp(a.flag,"add_friend") == 0)
-                    {//处理添加好友邀请
-                        printf("收到添加好友邀请\n");
-                        add_friend(&a,&clientNode);
-                        continue;
-                    }
-
                 }
 			}
 		}
@@ -554,6 +531,17 @@ int server_personal(struct message *a, clientinf *clientNode)
 	datatype e;
 	strcpy(e.name,(*a).name);
 	LinkList L;
+	L = (LinkList)findlist(clientlink,e);
+	if(L != NULL)
+	{
+		if(L->data.speak == 0)
+		{
+			strcpy((*a).flag,"sermsg");
+			sprintf((*a).msg,"对不起，你已经被管理员禁言了!");
+			send(L->data.decr,a,sizeof(struct message),0);
+			return 0;
+		}
+	}
 	L = clientlink;
 	L=L->next;
 	strcpy(e.name,(*a).addressee);
@@ -586,6 +574,7 @@ int overlap(struct message a)
     //puts("display!");
     //DisplayList(L);
 	L = clientlink->next;
+    puts(a.name);
 	while(L != NULL)
 	{
 		if(strcmp(L->data.name,a.name) == 0)
@@ -608,10 +597,11 @@ int overlap(struct message a)
 ***************************************************/
 int server_login(struct message *a, clientinf *clientNode)
 {
-	int i,server_flag;
+	int i;
 	char buf[MAXLEN];
 	i = login_check(a);
 
+    printf("i is %d\n",i);
 	if(i == 1)
 	{
 		printf("管理员admin登录成功!\n");
@@ -624,13 +614,11 @@ int server_login(struct message *a, clientinf *clientNode)
 	{
 		if(i == 0)
 		{
-            User_list* Friend_list;
 			printf("%s 登录成功!\n",(*a).name);
 			memset((*a).msg,0,strlen((*a).msg));
 			strcpy((*a).msg,"login,success!");
 			strcpy((*clientNode).name,(*a).name);
-            Friend_list = get_friend_list((*a).name);
-            clientNode->friend_list = Friend_list;
+            printf("aaa: %s\n",(*clientNode).name);
 			insertend(clientlink,*clientNode);
 			send((*clientNode).decr,a,sizeof(struct message),0);
 			
@@ -639,6 +627,7 @@ int server_login(struct message *a, clientinf *clientNode)
 			L=L->next;
 			strcpy((*a).flag,"sermsg");
 			sprintf((*a).msg,"欢迎 %s 进入聊天室!",(*a).name);
+            //DisplayList(L);
             
 
 			while(L != NULL)
@@ -654,7 +643,6 @@ int server_login(struct message *a, clientinf *clientNode)
 			send((*clientNode).decr,a,sizeof(struct message),0);
 		}
 	}
-
 }
 
 /***************************************************
@@ -684,6 +672,7 @@ int server_exit(struct message *a, clientinf *clientNode)
 	deletelist(clientlink ,(*clientNode));
 	L = clientlink;
 	L=L->next;
+	sprintf((*a).msg,"%s 离开聊天室",(*clientNode).name);
 	while(L != NULL)
 	{
 		send(L->data.decr,a,sizeof(struct message),0);
@@ -831,226 +820,6 @@ int server_view(struct message *a, clientinf *clientNode)
     strcpy((*a).msg,buf);
     send((*clientNode).decr,a,sizeof(struct message),0);
 }
-/***************************************
-函数名：friend_view
-参数 :messag *a ,clientNode clientlink
-功能：查询好友在线情况
-***************************************/
-void friend_view(struct message *a ,clientinf *clientNode )
-{
-    User_list* friends ;
-    LinkList L=clientlink,now;
-    datatype e;
-    strcpy(e.name,a->name);
-    now = (LinkList)findlist(clientlink,e);
-    if(now == NULL)
-    {
-        printf("friend_view:Not find %s\n",a->name);
-    }
-    friends = now->data.friend_list->next;
-    char str[MAXLEN],buf[MAXLEN];
-    memset(buf,0,strlen(buf));
-    int i=1;
-    while (friends!= NULL)
-    {
-        int f =0;
-
-        for(L=clientlink;L!=NULL;L=L->next)
-        {
-            if(strcmp(L->data.name,friends->name) == 0)
-            {
-                if(L->data.speak == 0)
-                {
-                    sprintf(str,"%d .%s(禁言)\n",i,L->data.name);
-                    strcat(buf,str);
-                }
-                else
-                {
-                    sprintf(str,"%d .%s(在线)\n",i,L->data.name);
-                    strcat(buf,str);
-                }
-                f=1;
-                break;
-            }
-        }
-        if(f ==0)
-        {
-            sprintf(str,"%d .%s(离线)\n",i,friends->name);
-            strcat(buf,str);
-        }
-        friends=friends->next;
-        i++;
-    }
-    strcpy(a->name,clientNode->name);
-    strcpy(a->msg,buf);
-    send(clientNode->decr,a,sizeof(struct message),0);
-    printf("test2:消息包内容：%s\n",a->msg);
-    printf("已向%s发送好友查看回执\n",a->name);
-}
-/****************************
-函数名：get_friend_list
-参数：char* name
-功能：载入好友列表
-返回值：该好友类型的结构体指针
-*****************************/
-User_list * get_friend_list(char * name)
-{
-    int file_fd;
-    char usr_name[MAX_LEN];
-    if((file_fd = open(name,O_RDWR|O_CREAT,0777))== -1)
-    {
-        perror("friend_list open error ");
-        return NULL;
-    }
-
-    User_list * head,*p;
-
-    head =(User_list *) malloc(sizeof(User_list));
-    if(head == NULL)
-    {
-        printf("malloc error!\n");
-        return NULL;
-    }
-
-    head->next = NULL;
-
-    while(read(file_fd,usr_name,(size_t) MAX_LEN+1) > 0)
-    {
-        p = (User_list *) malloc(sizeof(User_list));
-        printf("read %s\n",usr_name);
-        strcpy(p->name,usr_name);
-        p->next = head ->next;
-        head->next = p;
-    }
-
-    close(file_fd);
-    //printf("test:show findlist:\n");
-    //for(p=head->next;p != NULL;p=p->next)
-    //{
-    //    printf("%s\n",p->name);
-    //}
-
-    return head;
-}
-/****************************
-函数名：add_friend
-参数：messag a,clientinf clientNode
-功能 从want向wanted发送好友邀请
-返回值：0表示发送失败 1表示发送成功
-****************************/
-int add_friend( struct message *a,clientinf *clientNode)
-{
-    datatype e;
-    LinkList L=NULL;
-    if(strcmp(a->name,a->addressee)==0)
-    {
-        strcpy(a->flag,"sermsg");
-        strcpy(a->msg,"不能添加自己为好友");
-        send(clientNode->decr,a,sizeof(struct message),0);
-    }
-    //L=L->next;
-    strcpy(e.name,a->addressee);
-    L = (LinkList)findlist(clientlink,e);
-    if(L == NULL)
-    {
-        strcpy(a->flag,"sermsg");
-        sprintf(a->msg,"该用户不在线\n");
-        send(clientNode->decr,a,sizeof(struct message),0);
-        return 0;
-    }
-    else
-    {
-        strcpy(a->flag,"friend_wanted");
-        send(L->data.decr,a,sizeof(struct message),0);
-        printf("好友请求已经发送\n");
-    }
-    return 1;
-}
-
-/*********************************
-函数名：recv_friend
-参数： message* a, clientNode clientlink
-功能：处理一个好友接受请求
-返回值：无
-***********************************/
-void recv_friend(struct message *a,clientinf *clientNode)
-{
-    struct message send_msg;
-    datatype e;
-    strcpy(e.name,a->name);
-    LinkList L = NULL;
-    L =(LinkList)findlist(clientlink,e);
-    if(L == NULL)
-    {
-        printf("Not Find %s \n",a->name);
-        return;
-    }
-
-    if(strcmp(a->msg,"no") == 0)
-    {
-        printf("no\n");
-        strcpy(send_msg.msg,"receive!");
-        strcpy(send_msg.flag,"sermsg");
-
-    }
-    else
-    {
-        if(strcmp(a->msg,"yes") == 0)
-        {
-            printf("yes\n");
-            strcpy(send_msg.msg,"accept!");
-            strcpy(send_msg.flag,"sermsg");
-            int fd1 = open(a->name,(O_RDWR|O_APPEND|O_CREAT),0777);
-            int fd2 = open(a->addressee,(O_RDWR|O_CREAT|O_APPEND),0777);
-            if(fd1 == 0 ||fd2 == 0)
-            {
-                perror("open error ");
-                return;
-            }
-            write(fd1,a->addressee,MAX_LEN+1);
-            write(fd2,a->name,MAX_LEN+1);
-            close(fd1);
-            close(fd2);
-            datatype temp1,temp2;
-            //temp1 = (datatype *)malloc(sizeof(datatype));
-            //temp2 = (datatype *)malloc(sizeof(datatype));
-            strcpy(temp1.name,a->name);
-            strcpy(temp2.name,a->addressee);
-            L=NULL;
-            L = (LinkList)findlist(clientlink,temp1);
-            if(L == NULL)
-            {
-                printf("Not fond!\n");
-                return;
-            }
-
-            User_list *t;
-            t=(User_list*)malloc(sizeof(User_list));
-            strcpy(t->name,a->addressee);
-            t->next = (User_list*)L->data.friend_list->next;
-            L->data.friend_list ->next = t;
-            L=NULL;
-            L = (LinkList)findlist(clientlink,temp2);
-            {
-                if(L == NULL)
-                {
-                    printf("NOT FOND!\n");
-                    return;
-                }
-            }
-
-            t= (User_list *)malloc(sizeof(User_list));
-            strcpy(t->name,a->name);
-            t->next =(User_list*) L->data.friend_list->next;
-            L->data.friend_list->next = t;
-            printf("write down!\n");
-        }
-        
-    }
-    send(L->data.decr,&send_msg,sizeof(struct message),0);
-    printf("回执成功！\n");
-}
-
 /****************************
  函数名：CreateLinkList
  参数：无
@@ -1082,21 +851,12 @@ void deletelist(LinkList L, datatype e)
 {
     if(L==NULL||L->next ==NULL)
     return;
-    LinkList p   = L->next;
-    LinkList pre = L;
-    while(p)
+    for (LinkList head = L;strcmp(head->next->data.name,e.name)!=0;head = head->next)
     {
-        if(strcmp(p->data.name,e.name) == 0)
-        {
-            pre->next = p->next;
-            free(p);
-            break;
-        }
-        else
-        {
-            pre = p;
-            p   = p->next;
-        }
+        LinkList temp;
+        temp = head->next;
+        head->next = temp->next;
+        free(temp);
     }
 }
 /*****************************
@@ -1134,25 +894,6 @@ void insertend(LinkList L,datatype e)
     //puts("show!");
     //DisplayList(L);
 }
-/****************************
-函数名:friend_instert
-函数功能：在链表尾部插入一个节点
-传入参数：User_list * l, char *name
-返回值：无
-*****************************
-void friend_instert(User_list *L,char*name)
-{
-    User_list *p=L,*tail;
-    
-    while((tail != NULL) && (tail->next != NULL))
-    {
-        tail=tail->next;
-    }
-
-
-}
-*/
-
 /****************************
 函数名：DisplayList
 函数功能：显示当前链表中所有信息

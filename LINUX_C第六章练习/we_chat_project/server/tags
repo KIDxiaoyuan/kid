@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-CreatLinkList	server.c	/^ LinkList CreatLinkList(void)$/;"	f
+CreateLinkList	server.c	/^ LinkList CreateLinkList(void)$/;"	f
 DisplayList	server.c	/^void DisplayList(LinkList L)$/;"	f
 Group_Node	server.h	/^typedef struct Group_Node$/;"	s
 Group_list	server.h	/^}Group_list;$/;"	t	typeref:struct:_GNode
@@ -22,6 +22,7 @@ User_list	server.h	/^}User_list;$/;"	t	typeref:struct:u_node
 _GNode	server.h	/^typedef struct _GNode$/;"	s
 _LNode	server.h	/^typedef struct _LNode$/;"	s
 _SERVER_H	server.h	9;"	d
+add_friend	server.c	/^int add_friend( struct message *a,clientinf *clientNode)$/;"	f
 add_in	server.h	/^    struct sockaddr_in add_in;$/;"	m	struct:struct_clientinf	typeref:struct:struct_clientinf::sockaddr_in
 addressee	server.h	/^    char addressee[MAX_LEN];$/;"	m	struct:message
 admin	server.h	/^    char admin[MAX_LEN];$/;"	m	struct:Group_Node
@@ -33,13 +34,14 @@ decr	server.h	/^    int decr;$/;"	m	struct:struct_clientinf
 deletelist	server.c	/^void deletelist(LinkList L, datatype e)$/;"	f
 findlist	server.c	/^LinkList findlist(LinkList L,datatype e)$/;"	f
 flag	server.h	/^    char flag[15];$/;"	m	struct:message
-friend_list	server.h	/^    struct User_list *friend_list;$/;"	m	struct:struct_clientinf	typeref:struct:struct_clientinf::User_list
+friend_list	server.h	/^    User_list *friend_list;$/;"	m	struct:struct_clientinf
+friend_view	server.c	/^void friend_view(struct message *a ,clientinf *clientNode )$/;"	f
+get_friend_list	server.c	/^User_list * get_friend_list(char * name)$/;"	f
 group	server.h	/^}group;$/;"	t	typeref:struct:Group_Node
-group_list	server.h	/^    struct Group_list *group_list;$/;"	m	struct:struct_clientinf	typeref:struct:struct_clientinf::Group_list
 head	server.h	/^    struct _LNode head;    $/;"	m	struct:Group_Node	typeref:struct:Group_Node::_LNode
 insertend	server.c	/^void insertend(LinkList L,datatype e)$/;"	f
 login_check	server.c	/^ int login_check(struct message *recievemsg)$/;"	f
-main	server.c	/^int main (void)$/;"	f
+main	server.c	/^int main(void)$/;"	f
 message	server.h	/^struct message$/;"	s
 msg	server.h	/^    char msg[MAXLEN];$/;"	m	struct:message
 name	server.h	/^    char name[MAX_LEN];$/;"	m	struct:Group_Node
@@ -54,6 +56,7 @@ overlap	server.c	/^int overlap(struct message a)$/;"	f
 passwd	server.h	/^    char passwd[MAX_LEN];$/;"	m	struct:struct_clientinf
 pid	server.h	/^    pthread_t pid;$/;"	m	struct:struct_clientinf
 portnumber	server.h	30;"	d
+recv_friend	server.c	/^void recv_friend(struct message *a,clientinf *clientNode)$/;"	f
 reg_check	server.c	/^int reg_check(struct message *recievemsg)$/;"	f
 server_admin_kick	server.c	/^int server_admin_kick(struct message *a, clientinf *clientNode)$/;"	f
 server_admin_screen	server.c	/^int server_admin_screen(struct message *a, clientinf *clientNode)$/;"	f

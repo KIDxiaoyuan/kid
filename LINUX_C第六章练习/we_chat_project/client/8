@@ -1,0 +1,106 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^AR            = ar cqs$/;"	m
+CC	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^CC            = gcc$/;"	m
+CFLAGS	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)$/;"	m
+CHK_DIR_EXISTS	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^CHK_DIR_EXISTS= test -d$/;"	m
+COMPRESS	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^COMPRESS      = gzip -9f$/;"	m
+COPY	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^COPY          = cp -f$/;"	m
+COPY_DIR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^COPY_DIR      = cp -f -R$/;"	m
+COPY_FILE	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^COPY_FILE     = cp -f$/;"	m
+CXX	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^CXX           = g++$/;"	m
+CXXFLAGS	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^CXXFLAGS      = -pipe -g -std=gnu++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)$/;"	m
+DEFINES	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB$/;"	m
+DEL_DIR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^DEL_DIR       = rmdir$/;"	m
+DEL_FILE	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^DEL_FILE      = rm -f$/;"	m
+DESTDIR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^DESTDIR       = $/;"	m
+DIST	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^DIST          = \/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/mkspecs\/features\/spec_pre.prf \\$/;"	m
+DISTDIR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^DISTDIR = \/home\/kid\/kid\/LINUX_C第六章练习\/we_chat_project\/client\/build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug\/.tmp\/client1.0.0$/;"	m
+DISTNAME	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^DISTNAME      = client1.0.0$/;"	m
+FAULT	client.h	31;"	d
+INCPATH	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^INCPATH       = -I..\/client -I. -I\/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/include -I\/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/include\/QtWidgets -I\/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/include\/QtGui -I\/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/include\/QtCore -I. -I. -I\/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/mkspecs\/linux-g++$/;"	m
+INSTALL_DIR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^INSTALL_DIR   = cp -f -R$/;"	m
+INSTALL_FILE	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^INSTALL_FILE  = install -m 644 -p$/;"	m
+INSTALL_PROGRAM	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^INSTALL_PROGRAM = install -m 755 -p$/;"	m
+Interface	client.c	/^int Interface()$/;"	f
+LFLAGS	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^LFLAGS        = -Wl,-rpath,\/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/lib$/;"	m
+LIBS	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^LIBS          = $(SUBLIBS) -L\/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/lib -lQt5Widgets -L\/usr\/lib64 -lQt5Gui -lQt5Core -lGL -lpthread $/;"	m
+LINK	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^LINK          = g++$/;"	m
+MAINWINDOW_H	client/mainwindow.h	2;"	d
+MAKEFILE	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^MAKEFILE      = Makefile$/;"	m
+MAXLEN	client.h	29;"	d
+MKDIR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^MKDIR         = mkdir -p$/;"	m
+MOVE	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^MOVE          = mv -f$/;"	m
+MainWindow	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    class MainWindow: public Ui_MainWindow {};$/;"	c	namespace:Ui
+MainWindow	client/mainwindow.cpp	/^MainWindow::MainWindow(QWidget *parent) :$/;"	f	class:MainWindow
+MainWindow	client/mainwindow.h	/^class MainWindow : public QMainWindow$/;"	c
+OBJECTS	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^OBJECTS       = main.o \\$/;"	m
+OBJECTS_DIR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^OBJECTS_DIR   = .\/$/;"	m
+OK	client.h	30;"	d
+PORT	client.h	28;"	d
+QMAKE	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^QMAKE         = \/home\/kid\/Qt5.6.1\/5.6\/gcc_64\/bin\/qmake$/;"	m
+QMAKE_TARGET	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^QMAKE_TARGET  = client$/;"	m
+RANLIB	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^RANLIB        = $/;"	m
+Register	client.c	/^int Register(struct message *a)$/;"	f
+SED	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^SED           = sed$/;"	m
+SOURCES	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^SOURCES       = ..\/client\/main.cpp \\$/;"	m
+STRIP	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^STRIP         = strip$/;"	m
+SYMLINK	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^SYMLINK       = ln -f -s$/;"	m
+TAR	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^TAR           = tar -cf$/;"	m
+TARGET	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/Makefile	/^TARGET        = client$/;"	m
+UI_MAINWINDOW_H	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	10;"	d
+Ui	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^namespace Ui {$/;"	n
+Ui	client/mainwindow.h	/^namespace Ui {$/;"	n
+Ui_MainWindow	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^class Ui_MainWindow$/;"	c
+_CLIENT_H	client.h	9;"	d
+addressee	client.h	/^    char addressee[20];$/;"	m	struct:message
+admin_chat	client.c	/^int admin_chat(int sockfd,struct message *a)  $/;"	f
+admin_kick	client.c	/^int admin_kick(int sockfd,struct message *a)     $/;"	f
+admin_screen	client.c	/^int admin_screen(int sockfd,struct message *a)$/;"	f
+button	client/mainwindow.h	/^    QPushButton *button;$/;"	m	class:MainWindow
+centralWidget	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QWidget *centralWidget;$/;"	m	class:Ui_MainWindow
+chat_log	client.h	/^char chat_log[100];\/\/聊天记录名$/;"	v
+common_use_words	client.c	/^void common_use_words(char msg[])$/;"	f
+cutStr	client.c	/^void cutStr(char str[],char left[], int n, char right[],int max, char c)$/;"	f
+expression	client.c	/^void expression(char name[],char msg[])$/;"	f
+fd	client.h	/^int qid = -1,fd = -1;$/;"	v
+filefromname	client.h	/^char filefromname[20];\/\/文件来源$/;"	v
+filefromuser	client.h	/^char filefromuser[20];\/\/文件发送者用户名$/;"	v
+flag	client.h	/^    char flag[15];$/;"	m	struct:message
+handlerecvfile	client.c	/^void handlerecvfile(struct message *msg)$/;"	f
+handlerecvmsg	client.c	/^void handlerecvmsg(int *sockfd)$/;"	f
+handlesendfile	client.c	/^void handlesendfile()$/;"	f
+help	client.c	/^int help(char str[])$/;"	f
+label	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QLabel *label;$/;"	m	class:Ui_MainWindow
+label_2	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QLabel *label_2;$/;"	m	class:Ui_MainWindow
+label_3	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QLabel *label_3;$/;"	m	class:Ui_MainWindow
+lineEdit	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QLineEdit *lineEdit;$/;"	m	class:Ui_MainWindow
+lineEdit_2	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QLineEdit *lineEdit_2;$/;"	m	class:Ui_MainWindow
+lock	client.h	/^pthread_mutex_t lock;\/\/线程锁$/;"	v
+locname	client.h	/^char locname[20];\/\/本客户端用户名$/;"	v
+log_user	client.c	/^void log_user(struct message *a)$/;"	f
+login_admin	client.c	/^int login_admin(struct message *a)$/;"	f
+login_success	client.c	/^int login_success(struct message *a)$/;"	f
+main	client.c	/^int main(int argc,char *argv[])$/;"	f
+main	client/main.cpp	/^int main(int argc, char *argv[])$/;"	f
+mainToolBar	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QToolBar *mainToolBar;$/;"	m	class:Ui_MainWindow
+menuBar	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QMenuBar *menuBar;$/;"	m	class:Ui_MainWindow
+menuWechat	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QMenu *menuWechat;$/;"	m	class:Ui_MainWindow
+message	client.h	/^struct message\/\/消息结构体$/;"	s
+msg	client.h	/^    char msg [MAXLEN];$/;"	m	struct:message
+name	client.h	/^    char name[20];$/;"	m	struct:message
+qid	client.h	/^int qid = -1,fd = -1;$/;"	v
+retranslateUi	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    void retranslateUi(QMainWindow *MainWindow)$/;"	f	class:Ui_MainWindow
+savefilefd	client.h	/^int savefilefd = -1;\/\/保存文件描述符$/;"	v
+setupUi	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    void setupUi(QMainWindow *MainWindow)$/;"	f	class:Ui_MainWindow
+size	client.h	/^    int size;$/;"	m	struct:message
+sockfd	client.h	/^int sockfd = -1;$/;"	v
+statusBar	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QStatusBar *statusBar;$/;"	m	class:Ui_MainWindow
+ui	client/mainwindow.h	/^    Ui::MainWindow *ui;$/;"	m	class:MainWindow
+verticalLayout	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QVBoxLayout *verticalLayout;$/;"	m	class:Ui_MainWindow
+verticalLayoutWidget	build-client-Desktop_Qt_5_6_1_GCC_64bit-Debug/ui_mainwindow.h	/^    QWidget *verticalLayoutWidget;$/;"	m	class:Ui_MainWindow
+~MainWindow	client/mainwindow.cpp	/^MainWindow::~MainWindow()$/;"	f	class:MainWindow
